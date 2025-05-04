@@ -87,8 +87,8 @@ ram.runtime = "100M"
 
     extras.tor.repo = "deb https://deb.torproject.org/torproject.org stable main"
     extras.tor.key = "https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc"
-    extras.tor.packages = ["tor", "deb.torproject.org-keyring"]
+    extras.tor.packages = ["tor"]
     
     extras.i2p.repo = "deb https://repo.i2pd.xyz/debian bookworm main"
     extras.i2p.key = "https://repo.i2pd.xyz/r4sas.gpg"
-    extras.i2p.packages = "i2pd"
+    extras.i2p.packages = ["i2pd"]
