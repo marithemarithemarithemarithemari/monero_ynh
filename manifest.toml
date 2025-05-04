@@ -49,7 +49,7 @@ ram.runtime = "4G"
     # TODO: How resource intensive is it?
     help.en = "Advertising this node as an RPC node provides another service to the network as it allows people without a full node to connect to it. However, it may be resource intensive."
     type = "boolean"
-    default = "false"
+    default = false
 
 [resources]
     # See the packaging documentation for the full set
