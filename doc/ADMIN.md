@@ -1,3 +1,3 @@
 This is a dummy admin doc for this app
 
-The app install dir is `__INSTALL_DIR__`
+monerod is installed in `__INSTALL_DIR__` and the blockchain can be found in `__DATA_DIR__`

@@ -4,7 +4,6 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
-source _common.sh
 source /usr/share/yunohost/helpers
 
 ### Settings are automatically loaded as bash variables
@@ -28,35 +27,74 @@ ynh_script_progression "Stopping $app's systemd service..."
 ynh_systemctl --service="$app" --action="stop"
 
 #=================================================
-# ENSURE DOWNWARD COMPATIBILITY
-#=================================================
-ynh_script_progression "Ensuring downward compatibility..."
-
-ynh_app_setting_set_default --key=php_upload_max_filesize --value=50M
-ynh_app_setting_set_default --key=php_post_max_size --value=50M
-
-### N.B. : the following setting migration snippets are provided as *EXAMPLES*
-### of what you may want to do in some cases (e.g. a setting was not defined on
-### some legacy installs and you therefore want to initiaze stuff during upgrade)
-
-# If db_name doesn't exist, create it
-# ynh_app_setting_set_default --key=db_name --value="$(ynh_sanitize_dbid --db_name=$app)"
-
-# If install_dir doesn't exist, create it
-# ynh_app_setting_set_default --key=install_dir --value="/var/www/$app"
-
-#=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
-ynh_script_progression "Upgrading source files..."
+ynh_script_progression "Upgrading monerod..."
 
-### ynh_setup_source can wipe the destination dir if called with --full_replace.
-### On upgrade, that is certainly what you want, to remove any old source file that
-### does not exist in the new version of the software.
-### You can list with --keep every file/directory to *not* wipe or overwrite,
-### useful for configuration files, data directories, or plugins.
-# Download, check integrity, uncompress and patch the source from manifest.toml
-ynh_setup_source --dest_dir="$install_dir" --full_replace --keep=".env data"
+# check if there's an update and we're not just redownloading the same version or an older one
+
+wget -O "$install_dir/hashes_new.txt" "https://www.getmonero.org/downloads/hashes.txt"
+
+new_verification=$(gpg --verify "hashes_new.test" 2>&1)
+
+grep "Good signature" <<< $new_verification || ynh_die "Bad signature for hashes.txt"
+
+new_signature_date_line=$(echo "$new_verification" | grep "Signature made")
+
+new_date_string=$(echo "$new_signature_date_line" | awk '{print $4, $5, $6, $7, $8}')
+
+new_date=$(date -d "$new_date_string" +"%Y%m%d")
+
+old_verification=$(gpg --verify "hashes.test" 2>&1)
+
+grep "Good signature" <<< $verification || ynh_die "Bad signature for the old hashes.txt. Shouldn't happen."
+
+old_signature_date_line=$(echo "$old_verification" | grep "Signature made")
+
+old_date_string=$(echo "$old_signature_date_line" | awk '{print $4, $5, $6, $7, $8}')
+old_date=$(date -d "$old_date_string" +"%Y%m%d")
+
+if [ $old_date -le $new_date ];
+then
+    ynh_print_info "No new version available. Skipping download."
+    ynh_safe_rm "$install_dir/hashes_new.txt"
+    exit 0
+fi
+
+find "$install_dir" -type f -maxdepth 1 -execdir rm -f {} \;
+
+architecture=$(dpkg --print-architecture)
+
+case "$architecture" in
+    "amd64")
+        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linux64"
+        ;;
+    "arm64")
+        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linuxarm8"
+        ;;
+    "riscv64")
+        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linuxriscv64"
+        ;;
+    "i386")
+        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linux32"
+        ;;
+    # i think armhf is armv7 but im not sure. todo: check
+    "armhf")
+        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linuxarm7"
+        ;;
+    *)
+        ynh_die "Unsupported architecture: $architecture"
+        ;;
+esac
+
+cd "$install_dir"
+sha256sum -c "hashes.txt" --ignore-missing 2>&1 | grep OK || ynh_die "Bad hash for monero.tar.bz2"
+
+find "$install_dir" -type f -name "monero-linux*tar.bz2" -execdir tar xvf {} \;
+find "$install_dir" -type f -name "monero-linux*tar.bz2" -execdir rm {} \;
+monero_dir=$(find "$install_dir" -type d -name "monero*")
+find "monero_dir" -type f -exec mv {} . \;
+rm -r "$monero_dir"
 
 ### $install_dir will automatically be initialized with some decent
 ### permissions by default... however, you may need to recursively reapply
@@ -73,20 +111,21 @@ ynh_script_progression "Updating $app's configuration files..."
 ### The file will automatically be backed-up if it's found to be manually modified (because
 ### ynh_config_add keeps track of the file's checksum)
 
-ynh_config_add --template="some_config_file" --destination="$install_dir/some_config_file"
+echo >> "$install_dir/monero_tor.conf" << EOF
+HiddenServiceDir $data_dir/tor/
+HiddenServicePort 18089 127.0.0.1:18089    # interface for wallet ("RPC")
+HiddenServicePort 18084 127.0.0.1:18084    # interface for P2P network
+EOF
 
-# FIXME: this should be handled by the core in the future
-### You may need to use chmod 600 instead of 400,
-### for example if the app is expected to be able to modify its own config
-chmod 400 "$install_dir/some_config_file"
-chown "$app:$app" "$install_dir/some_config_file"
+chmod 444 "$install_dir/monero_tor.conf"
 
-### For more complex cases where you want to replace stuff using regexes,
-### you shoud rely on ynh_replace (which is basically a wrapper for sed)
-### When doing so, you also need to manually call ynh_store_file_checksum
-###
-### ynh_replace --match="match_string" --replace="replace_string" --file="$install_dir/some_config_file"
-### ynh_store_file_checksum "$install_dir/some_config_file"
+onion_hostname=$(cat "$data_dir/tor/hostname")
+i2p_hostname=$(curl -s http://127.0.0.1:7070/?page=i2p_tunnels | grep -Eo "[a-zA-Z0-9./?=_%:-]*" | grep "18089")
+
+ynh_config_add --template="monerod.conf" --destination="$install_dir/monerod.conf"
+
+chmod 400 "$install_dir/monerod.conf"
+chown "$app:$app" "$install_dir/monerod.conf"
 
 #=================================================
 # REAPPLY SYSTEM CONFIGURATION
@@ -95,17 +134,9 @@ ynh_script_progression "Upgrading system configurations related to $app..."
 
 ### This should be a literal copypaste of what happened in the install's "System configuration" section
 
-ynh_config_add_phpfpm
-
-ynh_config_add_nginx
-
 ynh_config_add_systemd
 
-yunohost service add "$app" --description="A short description of the app" --log="/var/log/$app/$app.log"
-
-ynh_config_add_logrotate
-
-ynh_config_add_fail2ban --logpath="/var/log/nginx/${domain}-error.log" --failregex="Regex to match into the log for a failed login"
+ynh_config_add_logrotate --logfile="$data_dir/monero.log"
 
 #=================================================
 # START SYSTEMD SERVICE
