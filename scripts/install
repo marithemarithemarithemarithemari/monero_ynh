@@ -106,8 +106,8 @@ EOF
 
 chmod 444 "$install_dir/monero_tor.conf"
 
-systemctl enable tor --quiet
-ynh_systemd_action --service_name="tor" --action="reload"
+ynh_systemctl --service="tor" --action="enable"
+ynh_systemctl --service="tor" --action="reload"
 
 onion_hostname=$(cat "$data_dir/tor/hostname")
 
@@ -134,7 +134,7 @@ EOF
 
 chmod 444 /etc/i2pd/tunnels.conf.d/monero-mainnet.conf
 
-ynh_systemd_action --service_name="i2pd" --action="reload"
+ynh_systemctl --service_name="i2pd" --action="reload"
 
 i2p_hostname=$(curl -s http://127.0.0.1:7070/?page=i2p_tunnels | grep -Eo "[a-zA-Z0-9./?=_%:-]*" | grep "18089")
 
