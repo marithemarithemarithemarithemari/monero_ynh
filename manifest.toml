@@ -21,7 +21,7 @@ code = "github.com/monero-project/monero"
 fund = "monero:84DreyVPzbgSLJC31b42ag2CUujt1GMuzGWkqBpqad2GWaiULRPX4eD8Y3aVJvHjzb56JQKodLudNJt4grBdgcXEAaejtEQ"
 
 [integration]
-yunohost = ">= 12.0.9"
+yunohost = ">= 12.0.0"
 helpers_version = "2.1"
 # i'm pretty sure monero runs in all the architectures yunohost supports
 architectures = "all"
@@ -34,9 +34,9 @@ sso = "not_relevant"
 # monero is really resource intensive
 # https://docs.getmonero.org/running-node/monerod-systemd/#assumptions
 # 120G because even if you run a pruned node you probably want more storage for when the blockchain grows
-disk = "120G"
-ram.build = "8G"
-ram.runtime = "4G"
+disk = "100MB"
+ram.build = "100MB"
+ram.runtime = "100MB"
 
 [install]
     [install.prune]
