@@ -70,15 +70,15 @@ ram.runtime = "4G"
     [resources.ports]
     main.default = 18080
     main.fixed = true
-    main.exposed = Both
+    main.exposed = true
 
     rpc_port.default = 18089
     rpc_port.fixed = true
-    rpc_port.exposed = Both
+    rpc_port.exposed = true
 
     zmq_port.defaut = 18081
     zmq_port.fixed = true
-    zmq_port.exposed = Both
+    zmq_port.exposed = true
 
     [resources.apt]
 
