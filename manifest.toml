@@ -34,9 +34,9 @@ sso = "not_relevant"
 # monero is really resource intensive
 # https://docs.getmonero.org/running-node/monerod-systemd/#assumptions
 # 120G because even if you run a pruned node you probably want more storage for when the blockchain grows
-disk = "100MB"
-ram.build = "100MB"
-ram.runtime = "100MB"
+disk = "100M"
+ram.build = "100M"
+ram.runtime = "100M"
 
 [install]
     [install.prune]
