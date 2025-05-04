@@ -111,7 +111,7 @@ ynh_script_progression "Updating $app's configuration files..."
 ### The file will automatically be backed-up if it's found to be manually modified (because
 ### ynh_config_add keeps track of the file's checksum)
 
-echo >> "$install_dir/monero_tor.conf" << EOF
+cat >> "$install_dir/monero_tor.conf" << EOF
 HiddenServiceDir $data_dir/tor/
 HiddenServicePort 18089 127.0.0.1:18089    # interface for wallet ("RPC")
 HiddenServicePort 18084 127.0.0.1:18084    # interface for P2P network
