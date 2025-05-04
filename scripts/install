@@ -67,7 +67,7 @@ sha256sum -c "hashes.txt" --ignore-missing 2>&1 | grep OK || ynh_die "Bad hash f
 find "$install_dir" -type f -name "monero-linux*tar.bz2" -execdir tar xvf {} \;
 find "$install_dir" -type f -name "monero-linux*tar.bz2" -execdir rm {} \;
 monero_dir=$(find "$install_dir" -type d -name "monero*")
-find "monero_dir" -type f -exec mv {} . \;
+find "$monero_dir" -type f -exec mv {} . \;
 rm -r "$monero_dir"
 
 ### $install_dir will automatically be initialized with some decent
