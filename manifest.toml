@@ -83,8 +83,6 @@ ram.runtime = "100M"
 
     [resources.apt]
 
-    packages = [""]
-
     extras.tor.repo = "deb https://deb.torproject.org/torproject.org stable main"
     extras.tor.key = "https://deb.torproject.org/torproject.org/A3C4F0F979CAA22CDBA8F512EE8CBC9E886DDD89.asc"
     extras.tor.packages = ["tor"]
