@@ -111,18 +111,15 @@ ynh_script_progression "Updating $app's configuration files..."
 ### The file will automatically be backed-up if it's found to be manually modified (because
 ### ynh_config_add keeps track of the file's checksum)
 
-cat >> "$install_dir/monero_tor.conf" << EOF
-HiddenServiceDir $data_dir/tor/
+cat >> "/etc/tor/monero_tor.conf" << EOF
+HiddenServiceDir /etc/tor/monerod
 HiddenServicePort 18089 127.0.0.1:18089    # interface for wallet ("RPC")
 HiddenServicePort 18084 127.0.0.1:18084    # interface for P2P network
 EOF
 
-chmod 444 "$install_dir/monero_tor.conf"
+chmod 444 "/etc/tor/monero_tor.conf"
 
-ynh_script_progression "Sleeping for 15 seconds to allow tor to start and create the onion service..."
-sleep 15s
-
-onion_hostname=$(cat "$data_dir/tor/hostname")
+onion_hostname=$(cat "/etc/tor/monerod/hostname")
 i2p_hostname=$(curl -s http://127.0.0.1:7070/?page=i2p_tunnels | grep -Eo "[a-zA-Z0-9./?=_%:-]*" | grep "18089")
 
 ynh_config_add --template="monerod.conf" --destination="$install_dir/monerod.conf"

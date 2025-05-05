@@ -19,7 +19,7 @@ ynh_script_progression "Removing system configurations related to $app..."
 
 # i don't think it's necessary to remove tor and i2pd
 
-grep -vF "%include $install_dir/monero_tor.conf" "/etc/tor/torrc" > /tmp/temp_file && mv /tmp/temp_file "/etc/tor/torrc"
+grep -vF "%include /etc/tor/monero_tor.conf" "/etc/tor/torrc" > /tmp/temp_file && mv /tmp/temp_file "/etc/tor/torrc"
 
 ynh_systemctl --service="tor" --action="reload"
 
