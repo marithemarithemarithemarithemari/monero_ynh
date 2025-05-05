@@ -112,14 +112,14 @@ ynh_script_progression "Updating $app's configuration files..."
 ### ynh_config_add keeps track of the file's checksum)
 
 cat >> "/etc/tor/monero_tor.conf" << EOF
-HiddenServiceDir /etc/tor/monerod
+HiddenServiceDir /var/lib/tor/monero
 HiddenServicePort 18089 127.0.0.1:18089    # interface for wallet ("RPC")
 HiddenServicePort 18084 127.0.0.1:18084    # interface for P2P network
 EOF
 
 chmod 444 "/etc/tor/monero_tor.conf"
 
-onion_hostname=$(cat "/etc/tor/monerod/hostname")
+onion_hostname=$(cat "/var/lib/tor/monero/hostname")
 i2p_hostname=$(curl -s http://127.0.0.1:7070/?page=i2p_tunnels | grep -Eo "[a-zA-Z0-9./?=_%:-]*" | grep "18089")
 
 ynh_config_add --template="monerod.conf" --destination="$install_dir/monerod.conf"

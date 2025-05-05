@@ -94,8 +94,9 @@ ynh_script_progression "Adding $app's configuration files..."
 
 ynh_script_progression "Making onion serivce..."
 
+# the default tor service is hardened so it can only read and write in that directory
 cat >> "/etc/tor/monero_tor.conf" << EOF
-HiddenServiceDir /etc/tor/monerod
+HiddenServiceDir /var/lib/tor/monero
 HiddenServicePort 18089 127.0.0.1:18089    # interface for wallet ("RPC")
 HiddenServicePort 18084 127.0.0.1:18084    # interface for P2P network
 EOF
@@ -108,14 +109,10 @@ EOF
 
 chmod 444 "/etc/tor/monero_tor.conf"
 
-mkdir -p "/etc/tor/monerod"
-chown -R "debian-tor:debian-tor" "/etc/tor/monerod"
-chmod 700 "/etc/tor/monerod"
-
 ynh_systemctl --service="tor" --action="enable"
 ynh_systemctl --service="tor" --action="reload"
 
-onion_hostname=$(cat "/etc/tor/monerod/hostname")
+onion_hostname=$(cat "/var/lib/tor/monero/hostname")
 
 ynh_script_progression "Onion hostname: $onion_hostname"
 
