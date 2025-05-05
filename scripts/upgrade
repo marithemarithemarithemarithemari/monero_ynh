@@ -119,6 +119,9 @@ EOF
 
 chmod 444 "$install_dir/monero_tor.conf"
 
+ynh_script_progression "Sleeping for 15 seconds to allow tor to start and create the onion service..."
+sleep 15
+
 onion_hostname=$(cat "$data_dir/tor/hostname")
 i2p_hostname=$(curl -s http://127.0.0.1:7070/?page=i2p_tunnels | grep -Eo "[a-zA-Z0-9./?=_%:-]*" | grep "18089")
 
