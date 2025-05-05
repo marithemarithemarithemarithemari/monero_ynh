@@ -106,11 +106,17 @@ EOF
 
 chmod 444 "$install_dir/monero_tor.conf"
 
+mkdir -p "$data_dir/tor/"
+chown -R "debian-tor:debian-tor" "$data_dir/tor/"
+chmod 775 "$data_dir/tor/"
+
 ynh_systemctl --service="tor" --action="enable"
 ynh_systemctl --service="tor" --action="reload"
 
 ynh_script_progression "Sleeping for 15 seconds to allow tor to start and create the onion service..."
-sleep 15
+sleep 15s
+
+chmod 775 "$data_dir/tor/hostname"
 
 onion_hostname=$(cat "$data_dir/tor/hostname")
 
