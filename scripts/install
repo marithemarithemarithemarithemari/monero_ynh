@@ -40,20 +40,20 @@ architecture=$(dpkg --print-architecture)
 
 case "$architecture" in
     "amd64")
-        wget --content-disposition -P -q "$install_dir" "https://downloads.getmonero.org/cli/linux64"
+        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linux64"
         ;;
     "arm64")
-        wget --content-disposition -P -q "$install_dir" "https://downloads.getmonero.org/cli/linuxarm8"
+        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linuxarm8"
         ;;
     "riscv64")
-        wget --content-disposition -P -q "$install_dir" "https://downloads.getmonero.org/cli/linuxriscv64"
+        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linuxriscv64"
         ;;
     "i386")
-        wget --content-disposition -P -q "$install_dir" "https://downloads.getmonero.org/cli/linux32"
+        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linux32"
         ;;
     # i think armhf is armv7 but im not sure. todo: check
     "armhf")
-        wget --content-disposition -P -q "$install_dir" "https://downloads.getmonero.org/cli/linuxarm7"
+        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linuxarm7"
         ;;
     *)
         ynh_die "Unsupported architecture: $architecture"
