@@ -112,6 +112,9 @@ chmod 444 "/etc/tor/monero_tor.conf"
 ynh_systemctl --service="tor" --action="enable"
 ynh_systemctl --service="tor" --action="reload"
 
+ynh_script_progression "Sleeping for 15 seconds to give time for tor to load and make our onion address..."
+sleep 15s
+
 onion_hostname=$(cat "/var/lib/tor/monero/hostname")
 
 ynh_script_progression "Onion hostname: $onion_hostname"
