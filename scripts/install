@@ -139,7 +139,10 @@ chmod 444 /etc/i2pd/tunnels.conf.d/monero-mainnet.conf
 
 ynh_store_file_checksum "/etc/i2pd/tunnels.conf.d/monero-mainnet.conf"
 
-ynh_systemctl --service_name="i2pd" --action="reload"
+ynh_systemctl --service="i2pd" --action="reload"
+
+ynh_script_progression "Sleeping for 15 seconds for i2p to start and make our eepsite..."
+sleep 15s
 
 i2p_hostname=$(curl -s http://127.0.0.1:7070/?page=i2p_tunnels | grep -Eo "[a-zA-Z0-9./?=_%:-]*" | grep "18089")
 
