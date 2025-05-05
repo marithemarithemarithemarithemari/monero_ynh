@@ -23,6 +23,9 @@ grep -vF "%include /etc/tor/monero_tor.conf" "/etc/tor/torrc" > /tmp/temp_file &
 
 ynh_systemctl --service="tor" --action="reload"
 
+ynh_safe_rm "/etc/tor/monerod/"
+ynh_safe_rm "/etc/tor/monero_tor.conf"
+
 ynh_safe_rm "/etc/i2pd/tunnels.conf.d/monero-mainnet.conf"
 # im not really sure if this is necessary but we'll do it anyway
 ynh_safe_rm "/var/lib/i2pd/monero-mainnet.dat"

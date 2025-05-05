@@ -106,7 +106,7 @@ cat >> "/etc/tor/torrc" << EOF
 %include /etc/tor/monero_tor.conf
 EOF
 
-chmod 444 "$install_dir/monero_tor.conf"
+chmod 444 "/etc/tor/monero_tor.conf"
 
 mkdir -p "/etc/tor/monerod"
 chown -R "debian-tor:debian-tor" "/etc/tor/monerod"
