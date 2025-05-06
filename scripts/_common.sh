@@ -1,11 +1,11 @@
 download_monero () {
-    architecture=$(dpkg-architecture -q "DEB_HOST_ARCH")
+    architecture=$(dpkg --print-architecture)
 
     case "$architecture" in
         "amd64")
             wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linux64"
             ;;
-        "arm64")
+        "aarch64" | "arm64")
             wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linuxarm8"
             ;;
         "riscv64")
@@ -14,8 +14,8 @@ download_monero () {
         "i386")
             wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linux32"
             ;;
-        # i think armhf is armv7 but im not sure. todo: check
-        "armhf")
+        # idk which one is the correct one but at least one will work
+        "armhf" | "armel" | "armv7")
             wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linuxarm7"
             ;;
         *)
