@@ -1,1 +1,1 @@
-There's a chance nothing is updated if we can't find a newer version. We do not have autoupdates.
+There's a chance nothing is updated if we can't find a newer version.
