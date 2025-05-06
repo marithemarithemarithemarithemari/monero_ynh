@@ -26,19 +26,6 @@ ynh_script_progression "Stopping $app's systemd service..."
 
 ynh_systemctl --service="$app" --action="stop"
 
-# same as in install
-if [ "$prune" = true ]; then
-    $prune="1"
-else
-    $prune="0"
-fi
-
-if [ "$rpc_node" = true ]; then
-    $rpc_node="1"
-else
-    $rpc_node="0"
-fi
-
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================
