@@ -136,7 +136,7 @@ ynh_script_progression "Upgrading system configurations related to $app..."
 
 ynh_config_add_systemd
 
-ynh_config_add_logrotate --logfile="$data_dir/monero.log"
+ynh_config_add_logrotate "$data_dir/monero.log"
 
 #=================================================
 # START SYSTEMD SERVICE
