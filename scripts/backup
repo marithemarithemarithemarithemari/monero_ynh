@@ -5,6 +5,7 @@
 #=================================================
 
 # Keep this path for calling _common.sh inside the execution's context of backup and restore scripts
+source ../settings/scripts/_common.sh
 source /usr/share/yunohost/helpers
 
 ynh_print_info "Declaring files to be backed up..."
@@ -19,9 +20,9 @@ ynh_backup "$install_dir"
 # BACKUP CONFIGURATION FILES FOR HIDDEN NETWORKS
 #=================================================
 
-ynh_backup_if_checksum_is_different "/etc/tor/monero_tor.conf"
+ynh_backup "/etc/tor/monero_tor.conf"
 
-ynh_backup_if_checksum_is_different "/etc/i2pd/tunnels.conf.d/monero-mainnet.conf"
+ynh_backup "/etc/i2pd/tunnels.conf.d/monero-mainnet.conf"
 
 #=================================================
 # BACKUP THE DATA DIR
@@ -29,7 +30,9 @@ ynh_backup_if_checksum_is_different "/etc/i2pd/tunnels.conf.d/monero-mainnet.con
 
 # backuping the blockchain doesn't sound like a good idea
 # backup the file with the i2p key for our i2p site (i think it's an eepsite?)
+
 ynh_backup "/var/lib/i2pd/monero-mainnet.dat"
+ynh_backup "/var/lib/tor/monero"
 
 #=================================================
 # BACKUP SYSTEM CONFIGURATION

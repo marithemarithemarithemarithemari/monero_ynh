@@ -18,7 +18,7 @@ admindoc = "https://docs.getmonero.org/running-node/monerod-systemd/"
 userdoc = "https://docs.getmonero.org/interacting/overview/"
 code = "github.com/monero-project/monero"
 
-fund = "monero:84DreyVPzbgSLJC31b42ag2CUujt1GMuzGWkqBpqad2GWaiULRPX4eD8Y3aVJvHjzb56JQKodLudNJt4grBdgcXEAaejtEQ"
+fund = "monero:85EbcnonnTcKZn2mjDHAq1GCqtCsMTbuF1rg5UFL9DU68kn8uu2BmHJgj2dkQAZwZeSfUYf7SuUsQVhcPdrjjz9xFYMk6YF"
 
 [integration]
 yunohost = ">= 12.0.0"

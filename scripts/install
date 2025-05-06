@@ -4,6 +4,7 @@
 # IMPORT GENERIC HELPERS
 #=================================================
 
+source _common.sh
 source /usr/share/yunohost/helpers
 
 ### Install parameters are automatically saved as settings
@@ -30,45 +31,14 @@ source /usr/share/yunohost/helpers
 #=================================================
 ynh_script_progression "Setting up source files..."
 
-gpg --import binaryfate.asc
+# https://blog.oddbit.com/post/2020-10-05-a-note-about-running-gpgv/
+gpg --no-default-keyring --keyring ~/.gnupg/trustedkeys.kbx --import binaryfate.asc
 
 wget -O "$install_dir/hashes.txt" "https://www.getmonero.org/downloads/hashes.txt"
 
-gpg --verify "$install_dir/hashes.txt" 2>&1 | grep "Good signature" || ynh_die "Bad signature for hashes.txt"
+gpgv "$install_dir/hashes.txt"
 
-architecture=$(dpkg --print-architecture)
-
-case "$architecture" in
-    "amd64")
-        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linux64"
-        ;;
-    "arm64")
-        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linuxarm8"
-        ;;
-    "riscv64")
-        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linuxriscv64"
-        ;;
-    "i386")
-        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linux32"
-        ;;
-    # i think armhf is armv7 but im not sure. todo: check
-    "armhf")
-        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linuxarm7"
-        ;;
-    *)
-        ynh_die "Unsupported architecture: $architecture"
-        ;;
-esac
-
-cd "$install_dir"
-sha256sum -c "hashes.txt" --ignore-missing 2>&1 | grep OK || ynh_die "Bad hash for monero.tar.bz2"
-
-# we don't delete the other monero binaries but it should be okay i think. we should have storage for an extra 150~ MB
-find "$install_dir" -type f -name "monero-linux*tar.bz2" -execdir tar xvf {} \;
-find "$install_dir" -type f -name "monero-linux*tar.bz2" -execdir rm {} \;
-monero_dir=$(find "$install_dir" -type d -name "monero-*")
-find "$monero_dir" -type f -exec mv {} . \;
-rm -r "$monero_dir"
+download_and_extract_monero
 
 ### $install_dir will automatically be initialized with some decent
 ### permission by default... however, you may need to recursively reapply

@@ -1,1 +1,1 @@
-It's possible that nothing was updated if we couldn't find a new version for monero.
+It's possible that nothing was updated if we couldn't find a new version for Monero.

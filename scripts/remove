@@ -3,7 +3,7 @@
 #=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
-
+source _common.sh
 source /usr/share/yunohost/helpers
 
 ### For remove operations:
@@ -27,7 +27,6 @@ ynh_safe_rm "/var/lib/tor/monero"
 ynh_safe_rm "/etc/tor/monero_tor.conf"
 
 ynh_safe_rm "/etc/i2pd/tunnels.conf.d/monero-mainnet.conf"
-# im not really sure if this is necessary but we'll do it anyway
 ynh_safe_rm "/var/lib/i2pd/monero-mainnet.dat"
 
 ynh_systemctl --service="i2pd" --action="reload"

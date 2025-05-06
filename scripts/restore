@@ -1,0 +1,14 @@
+#!/bin/bash
+
+source ../settings/scripts/_common.sh
+source /usr/share/yunohost/helpers
+
+ynh_systemctl --service="i2pd" --action="stop"
+ynh_systemctl --service="tor" --action="stop"
+
+# we don't actually backup anything that should make this take less than a second
+ynh_script_progression "Restoring configuration files and hidden service directories..."
+
+ynh_restore_everything
+
+ynh_script_progression "Restoration complete"

@@ -3,7 +3,7 @@
 #=================================================
 # IMPORT GENERIC HELPERS
 #=================================================
-
+source _common.sh
 source /usr/share/yunohost/helpers
 
 ### Settings are automatically loaded as bash variables
@@ -35,26 +35,22 @@ ynh_script_progression "Upgrading monerod..."
 
 wget -O "$install_dir/hashes_new.txt" "https://www.getmonero.org/downloads/hashes.txt"
 
-new_verification=$(gpg --verify "hashes_new.test" 2>&1)
+new_verification=$(gpgv "hashes_new.txt")
 
-grep "Good signature" <<< $new_verification || ynh_die "Bad signature for hashes.txt"
+new_signature_date_line=$(grep "Signature made" "$new_verification")
 
-new_signature_date_line=$(echo "$new_verification" | grep "Signature made")
+new_date_string=$(awk '{print $4, $5, $6, $7, $8}' <<< "$new_signature_date_line")
 
-new_date_string=$(echo "$new_signature_date_line" | awk '{print $4, $5, $6, $7, $8}')
+new_date=$(date -d "$new_date_string" +"%s")
 
-new_date=$(date -d "$new_date_string" +"%Y%m%d")
+old_verification=$(gpgv "hashes.txt")
 
-old_verification=$(gpg --verify "hashes.test" 2>&1)
+old_signature_date_line=$(grep "Signature made" "$new_verification")
 
-grep "Good signature" <<< $verification || ynh_die "Bad signature for the old hashes.txt. Shouldn't happen."
+old_date_string=$(awk '{print $4, $5, $6, $7, $8}' <<< "$old_signature_date_line")
+old_date=$(date -d "$old_date_string" +"%s")
 
-old_signature_date_line=$(echo "$old_verification" | grep "Signature made")
-
-old_date_string=$(echo "$old_signature_date_line" | awk '{print $4, $5, $6, $7, $8}')
-old_date=$(date -d "$old_date_string" +"%Y%m%d")
-
-if [ $old_date -le $new_date ];
+if [ $old_date -ge $new_date ];
 then
     ynh_print_info "No new version available. Skipping download."
     ynh_safe_rm "$install_dir/hashes_new.txt"
@@ -63,38 +59,7 @@ fi
 
 find "$install_dir" -type f -maxdepth 1 -execdir rm -f {} \;
 
-architecture=$(dpkg --print-architecture)
-
-case "$architecture" in
-    "amd64")
-        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linux64"
-        ;;
-    "arm64")
-        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linuxarm8"
-        ;;
-    "riscv64")
-        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linuxriscv64"
-        ;;
-    "i386")
-        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linux32"
-        ;;
-    # i think armhf is armv7 but im not sure. todo: check
-    "armhf")
-        wget --content-disposition -P "$install_dir" "https://downloads.getmonero.org/cli/linuxarm7"
-        ;;
-    *)
-        ynh_die "Unsupported architecture: $architecture"
-        ;;
-esac
-
-cd "$install_dir"
-sha256sum -c "hashes.txt" --ignore-missing 2>&1 | grep OK || ynh_die "Bad hash for monero.tar.bz2"
-
-find "$install_dir" -type f -name "monero-linux*tar.bz2" -execdir tar xvf {} \;
-find "$install_dir" -type f -name "monero-linux*tar.bz2" -execdir rm {} \;
-monero_dir=$(find "$install_dir" -type d -name "monero*")
-find "monero_dir" -type f -exec mv {} . \;
-rm -r "$monero_dir"
+download_and_extract_monero
 
 ### $install_dir will automatically be initialized with some decent
 ### permissions by default... however, you may need to recursively reapply
@@ -104,27 +69,10 @@ chown -R "$app:www-data" "$install_dir"
 #=================================================
 # UPDATE A CONFIG FILE
 #=================================================
-ynh_script_progression "Updating $app's configuration files..."
+# just restore everything from the backups; the tor & i2p hidden service directories should be there
+# so those addresses should be the same so we shouldn't need to modify anything
+bash restore
 
-### Same as during install
-###
-### The file will automatically be backed-up if it's found to be manually modified (because
-### ynh_config_add keeps track of the file's checksum)
-
-cat >> "/etc/tor/monero_tor.conf" << EOF
-HiddenServiceDir /var/lib/tor/monero
-HiddenServicePort 18089 127.0.0.1:18089    # interface for wallet ("RPC")
-HiddenServicePort 18084 127.0.0.1:18084    # interface for P2P network
-EOF
-
-chmod 444 "/etc/tor/monero_tor.conf"
-
-onion_hostname=$(cat "/var/lib/tor/monero/hostname")
-i2p_hostname=$(curl -s http://127.0.0.1:7070/?page=i2p_tunnels | grep -Eo "[a-zA-Z0-9./?=_%:-]*" | grep "18089")
-
-ynh_config_add --template="monerod.conf" --destination="$install_dir/monerod.conf"
-
-chmod 400 "$install_dir/monerod.conf"
 chown "$app:$app" "$install_dir/monerod.conf"
 
 #=================================================

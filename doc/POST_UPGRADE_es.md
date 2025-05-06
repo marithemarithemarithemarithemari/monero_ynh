@@ -1,0 +1,1 @@
+Es posible que nada se haya actualizado porque puede que no hubieramos encontrado una version nueva para Monero.

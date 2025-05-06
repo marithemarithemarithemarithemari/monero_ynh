@@ -1,7 +1,9 @@
 # Monero daemon package
+*[Version de este README en español.](./README_es.md)
 ## Features
 - Very simple instalation. Takes roughly 6 clicks total to install monerod.
-- Automatically makes onion and i2p addresses to use them for monerod
+- Automatically makes onion and i2p addresses to use them for monerod.
+- Supports Spanish (WIP) and English.
 ## Install
 In the web app just scroll to the bottom and put this repository's url.
 

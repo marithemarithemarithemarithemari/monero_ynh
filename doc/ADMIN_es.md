@@ -1,0 +1,1 @@
+El daemon de monero esta instalado en `__INSTALL_DIR__` y la cadena de bloques esta en `__DATA_DIR__`. La configuracion de tor esta en /etc/tor/. Las llaves privadas de tor estan en /var/lib/tor/monero/. La configuracion de i2p esta en /etc/i2pd/tunnels.conf.d/ y las llaves privadas de i2p tambien estan ahi.
