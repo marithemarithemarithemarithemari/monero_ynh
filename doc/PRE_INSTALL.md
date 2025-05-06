@@ -1,1 +1,1 @@
-The monero daemon is a really resource intensive app while syncing but once you're fully synced it's resourse usage should lower dramatically.
+The monero daemon is a really resource intensive app while syncing but once you're fully synced its resourse usage should lower dramatically.

@@ -25,6 +25,22 @@ source /usr/share/yunohost/helpers
 ### $app is the app id (i.e. 'example' for first install,
 ### or 'example__2', '__3'... for multi-instance installs)
 
+# probably unnecessary but just to be sure since i'm pretty sure monerod doesn't allow
+# literal true or falses in its configuration; only 1 or 0
+# https://docs.getmonero.org/interacting/monero-config-file/#syntax
+
+if [ "$prune" = true ]; then
+    $prune=1
+else
+    $prune=0
+fi
+
+if [ "$rpc_node" = true ]; then
+    $rpc_node=1
+else
+    $rpc_node=0
+fi
+
 #=================================================
 # DOWNLOAD, CHECK AND UNPACK SOURCE
 #=================================================

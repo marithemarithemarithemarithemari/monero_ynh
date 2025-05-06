@@ -2,7 +2,7 @@
 
 packaging_format = 2
 
-id = "monerod"
+id = "monero"
 name = "Monero Daemon"
 description.en = "App to run the monero daemon for the private, decentralized cryptocurrency monero."
 
