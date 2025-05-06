@@ -1,5 +1,5 @@
 # Paquete para el daemon de Monero
-*[Version of this readme in English](./README.md)
+**[Version of this readme in English](./README.md)**
 ## Caracteristicas
 - Instalacion muy simple. Solo toma 6 clicks en total para instalar monerod.
 - Automaticamente hace direcciones de tor e i2p para usar con monerod.
