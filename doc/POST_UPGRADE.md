@@ -1,1 +1,1 @@
-This is a dummy disclaimer to display after upgrades
+It's possible that nothing was updated if we couldn't find a new version for monero.

@@ -1,1 +1,1 @@
-This is a dummy description of this app features
+This is a package that runs the daemon for the private, untraceable currency monero. It automatically makes onion and i2p addresses to use with monerod.

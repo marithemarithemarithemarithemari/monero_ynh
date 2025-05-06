@@ -1,7 +1,1 @@
-This is a dummy disclaimer to display after the install
-
-The app url is <https://__DOMAIN____PATH__>
-
-The app install dir is `__INSTALL_DIR__`
-
-The app id is `__ID__`
+The monero daemon is a really resource intensive app while syncing but once you're fully synced it's resourse usage should lower dramatically. Also you won't be able to use your wallet with it until it's fully synced. The blockchain is stored in `__DATA_DIR__` and the monero binaries in `__INSTALL_DIR__`.

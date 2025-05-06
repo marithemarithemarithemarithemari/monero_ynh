@@ -1,3 +1,1 @@
-This is a dummy admin doc for this app
-
-monerod is installed in `__INSTALL_DIR__` and the blockchain can be found in `__DATA_DIR__`
+monerod is installed in `__INSTALL_DIR__` and the blockchain can be found in `__DATA_DIR__`. The tor configuration is in /etc/tor/. The directory with the tor private keys is in /var/lib/tor/monero. The i2p configuration is in /etc/i2pd/tunnels.conf.d/ and the i2p private keys can be found there as well.

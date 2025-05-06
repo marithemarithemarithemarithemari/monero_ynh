@@ -1,1 +1,1 @@
-This is a dummy disclaimer to display prior to the install
+The monero daemon is a really resource intensive app while syncing but once you're fully synced it's resourse usage should lower dramatically.
