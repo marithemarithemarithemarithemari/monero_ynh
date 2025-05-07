@@ -1,1 +1,1 @@
-Este es un paquete que corre el daemon para Monero, una criptomoneda privada y descentralizada que mantiene tus finanzas seguras y confidenciales. Automaticamente hace direcciones de tor e i2p para usar con el daemon.
+Este es un paquete que corre el daemon para Monero, una criptomoneda privada y descentralizada que mantiene tus finanzas seguras y confidenciales. Automáticamente hace direcciones de tor e i2p para usar con el daemon.

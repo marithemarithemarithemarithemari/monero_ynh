@@ -94,5 +94,5 @@ ram.runtime = "100M"
     url = "https://github.com/monero-project/monero"
 
     autoupdate.strategy = "latest_github_release"
-    autoupdate.version_regex = "^v\d+\.\d+\.\d+\.\d+$"
+    autoupdate.version_regex = '^v\d+\.\d+\.\d+\.\d+$'
     prefetch = false

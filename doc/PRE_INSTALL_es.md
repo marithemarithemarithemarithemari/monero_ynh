@@ -1,1 +1,1 @@
-El daemon de Monero usa muchos recursos mientras se esta sincronizando pero una vez que termine su uso de recursos deberia caer dramaticamente.
+El daemon de Monero usa muchos recursos mientras se está sincronizando pero una vez que termine su uso de recursos debería caer dramáticamente.
