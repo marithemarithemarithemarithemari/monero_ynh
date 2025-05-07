@@ -11,12 +11,11 @@ version = "1.0~ynh1"
 maintainers = ["mari"]
 
 [upstream]
-# NB: Only the "license" key is mandatory. Remove entries for which there's no relevant data
 license = "BSD-3-Clause" # you can see the available licenses identifiers list here: https://spdx.org/licenses/
 website = "https://www.getmonero.org/"
 admindoc = "https://docs.getmonero.org/running-node/monerod-systemd/"
 userdoc = "https://docs.getmonero.org/interacting/overview/"
-code = "github.com/monero-project/monero"
+code = "https://github.com/monero-project/monero"
 
 fund = "monero:85EbcnonnTcKZn2mjDHAq1GCqtCsMTbuF1rg5UFL9DU68kn8uu2BmHJgj2dkQAZwZeSfUYf7SuUsQVhcPdrjjz9xFYMk6YF"
 
@@ -90,3 +89,10 @@ ram.runtime = "100M"
     extras.i2p.repo = "deb https://repo.i2pd.xyz/debian bookworm main"
     extras.i2p.key = "https://repo.i2pd.xyz/r4sas.gpg"
     extras.i2p.packages = ["i2pd"]
+
+    [resources.sources.main]
+    url = "https://github.com/monero-project/monero"
+
+    autoupdate.strategy = "latest_github_release"
+    autoupdate.version_regex = "^v\d+\.\d+\.\d+\.\d+$"
+    prefetch = false

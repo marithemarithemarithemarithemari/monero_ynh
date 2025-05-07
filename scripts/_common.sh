@@ -1,5 +1,5 @@
 download_monero () {
-    architecture=$(dpkg --print-architecture)
+    local architecture=$(dpkg --print-architecture)
 
     case "$architecture" in
         "amd64")
@@ -29,7 +29,7 @@ extract_monero () {
     find "$install_dir" -type f -name "monero-linux*tar.bz2" -execdir tar xvf {} \;
     find "$install_dir" -type f -name "monero-linux*tar.bz2" -execdir ynh_safe_rm {} \;
 
-    monero_dir=$(find "$install_dir" -type d -name "monero-*")
+    local monero_dir=$(find "$install_dir" -type d -name "monero-*")
     find "$monero_dir" -type f -exec mv {} . \;
     ynh_safe_rm "$monero_dir"
 }
